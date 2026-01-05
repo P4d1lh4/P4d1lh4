@@ -36,14 +36,6 @@ Supports CRUD operations and deployment with Docker.
 
 ---
 
-<!-- ========================== STATS ========================== -->
-<h3 align="center">📊 Most Used Languages</h3>
-<p align="center">
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=P4d1lh4&layout=compact&theme=midnight-purple&hide_border=true&bg_color=0D0D0D&title_color=FFFFFF&text_color=c9d1d9" height="180em"/>
-</p>
-
----
-
 <!-- ========================== TECHNOLOGIES ========================== -->
 <h3 align="center">🧠 Technologies I work with</h3>
 <p align="center">
