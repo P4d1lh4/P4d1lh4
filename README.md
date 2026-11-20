@@ -64,6 +64,13 @@
       <p><sub>ROC-AUC between 0.64 and 0.68 is typical for this dataset. The model ranks risk better than chance but does not separate cases cleanly, and the README says so: a score well above 0.72 here would point to leakage.</sub></p>
     </td>
   </tr>
+  <tr>
+    <td colspan="2" align="center">
+      <a href="https://github.com/P4d1lh4/health-project#dashboard-streamlit"><img src="https://raw.githubusercontent.com/P4d1lh4/health-project/main/docs/img/dashboard-panorama.png" width="100%" alt="health-project dashboard, overview tab: cohort indicators and 30-day readmission rate by prior inpatient visits and by discharge destination"/></a>
+      <br/>
+      <sub>The dashboard's overview tab: where readmission concentrates, by prior inpatient visits and by discharge destination.</sub>
+    </td>
+  </tr>
 </table>
 
 ## 🚀 More projects
