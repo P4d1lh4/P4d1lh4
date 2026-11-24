@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <a href="#-spotlight-health-project">Spotlight</a> ·
+  <a href="#-spotlight-readmissao-sus">Spotlight</a> ·
   <a href="#-more-projects">Projects</a> ·
   <a href="#-stack">Stack</a> ·
   <a href="#-experience">Experience</a> ·
@@ -23,52 +23,53 @@
 ## 👋 About
 
 - I build and maintain production web apps with **React, Next.js, TypeScript and Node.js**. At Seaway I own the front-end of the main product: routing refactor, code splitting and memoization cut the LCP from 4.1s to 2.4s.
-- I care about **software for healthcare**. My thesis was a heuristic evaluation (Nielsen) of a public health app on Android and iOS, and I have been building the AI service of a digital death-certificate proposal for the Brazilian public health system (SUS).
+- I care about **software for healthcare**. My thesis was a heuristic evaluation (Nielsen) of a public health app on Android and iOS, and my recent projects work with public health data: readmission prediction on SUS records with FHIR output, and drug-safety signal detection on FDA reports.
 - I like putting **LLMs to practical use**: structured outputs, multimodal analysis and agents wired into real back-ends (FastAPI, NestJS).
 
-## ⭐ Spotlight: health-project
+## ⭐ Spotlight: readmissao-sus
 
 <table>
   <tr>
     <td width="58%" valign="top">
-      <h3><a href="https://github.com/P4d1lh4/health-project">health-project</a></h3>
-      <p><b>Predicting 30-day hospital readmission</b> for diabetic patients, from raw data to a decision a care team can act on. Built on the UCI <i>Diabetes 130-US hospitals</i> dataset.</p>
+      <h3><a href="https://github.com/P4d1lh4/readmissao-sus">readmissao-sus</a></h3>
+      <p><b>Predicting unplanned 30-day hospital readmission</b> with public data from the Brazilian public health system (SIH/SUS, Pernambuco, 2023–2024), and turning each discharge into a FHIR document following the national (RNDS) profiles.</p>
       <ul>
-        <li><b>Pipeline</b>: cohort building, feature engineering and model selection (Logistic Regression, Random Forest, XGBoost) with cross-validation grouped by patient, so no patient appears in both train and test.</li>
-        <li><b>API</b>: FastAPI <code>/predict</code> endpoint with input validation and a saved decision threshold.</li>
-        <li><b>Dashboard</b>: Streamlit app with five views, from where readmission concentrates to how many cases a team finds per thousand discharges at a given follow-up capacity.</li>
-        <li><b>Explainability</b>: calibration curve, threshold analysis and SHAP, in notebooks committed with their outputs.</li>
+        <li><b>Data</b>: hospital records downloaded from the DATASUS FTP, stored as Parquet and assembled in DuckDB with versioned SQL. The same person is linked across admissions without any national ID, through a key stored only as a salted hash.</li>
+        <li><b>Model</b>: Logistic Regression, Random Forest and XGBoost, trained on 2023 and tested on 2024, with cross-validation grouped by person and a leakage investigation on every run.</li>
+        <li><b>Hospitals</b>: observed/expected readmission ratio per hospital from a risk-adjustment model, with exact 95% Poisson intervals.</li>
+        <li><b>Interoperability</b>: each discharge becomes a FHIR R4 discharge summary, checked locally with the official HL7 validator in Docker and served with the risk by a FastAPI endpoint.</li>
       </ul>
       <p>
         <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"/>
-        <img src="https://img.shields.io/badge/scikit--learn-F7931E?style=flat-square&logo=scikitlearn&logoColor=white" alt="scikit-learn"/>
+        <img src="https://img.shields.io/badge/DuckDB-FFF000?style=flat-square&logo=duckdb&logoColor=black" alt="DuckDB"/>
         <img src="https://img.shields.io/badge/XGBoost-0f172a?style=flat-square" alt="XGBoost"/>
+        <img src="https://img.shields.io/badge/FHIR_R4-E34F26?style=flat-square" alt="FHIR R4"/>
         <img src="https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white" alt="FastAPI"/>
         <img src="https://img.shields.io/badge/Streamlit-FF4B4B?style=flat-square&logo=streamlit&logoColor=white" alt="Streamlit"/>
-        <img src="https://img.shields.io/badge/SHAP-6a0dad?style=flat-square" alt="SHAP"/>
+        <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white" alt="Docker"/>
         <img src="https://img.shields.io/badge/pytest-0A9EDC?style=flat-square&logo=pytest&logoColor=white" alt="pytest"/>
       </p>
-      <p><a href="https://github.com/P4d1lh4/health-project"><b>View the repository →</b></a></p>
+      <p><a href="https://github.com/P4d1lh4/readmissao-sus"><b>View the repository →</b></a></p>
     </td>
     <td width="42%" valign="top">
-      <h3>Results on the held-out test set</h3>
+      <h3>Results on 2024, a year the model never saw</h3>
       <table>
-        <tr><td>Encounters</td><td align="right"><b>99,343</b></td></tr>
-        <tr><td>Patients</td><td align="right"><b>69,990</b></td></tr>
-        <tr><td>Winning model</td><td align="right"><b>XGBoost</b></td></tr>
-        <tr><td>ROC-AUC</td><td align="right"><b>0.680</b></td></tr>
-        <tr><td>PR-AUC (prevalence 0.111)</td><td align="right"><b>0.238</b></td></tr>
-        <tr><td>Brier score</td><td align="right"><b>0.093</b></td></tr>
-        <tr><td>Recall at the chosen threshold</td><td align="right"><b>0.472</b></td></tr>
+        <tr><td>Discharges (2023–2024)</td><td align="right"><b>940,139</b></td></tr>
+        <tr><td>Unplanned 30-day readmission</td><td align="right"><b>5.5%</b></td></tr>
+        <tr><td>Test discharges</td><td align="right"><b>420,746</b></td></tr>
+        <tr><td>ROC-AUC</td><td align="right"><b>0.79</b></td></tr>
+        <tr><td>Mean calibration error</td><td align="right"><b>0.4 pp</b></td></tr>
+        <tr><td>Hospitals compared</td><td align="right"><b>193</b></td></tr>
+        <tr><td>FHIR bundles valid</td><td align="right"><b>20 / 20</b></td></tr>
       </table>
-      <p><sub>ROC-AUC between 0.64 and 0.68 is typical for this dataset. The model ranks risk better than chance but does not separate cases cleanly, and the README says so: a score well above 0.72 here would point to leakage.</sub></p>
+      <p><sub>The first model scored 0.84, which was too good. The excess came from scheduled returns and administrative records from the same hospital; removing them from the target gave the honest 0.79.</sub></p>
     </td>
   </tr>
   <tr>
     <td colspan="2" align="center">
-      <a href="https://github.com/P4d1lh4/health-project#dashboard-streamlit"><img src="https://raw.githubusercontent.com/P4d1lh4/health-project/main/docs/img/dashboard-panorama.png" width="100%" alt="health-project dashboard, overview tab: cohort indicators and 30-day readmission rate by prior inpatient visits and by discharge destination"/></a>
+      <a href="https://github.com/P4d1lh4/readmissao-sus#hospitais-razão-observadoesperado"><img src="https://raw.githubusercontent.com/P4d1lh4/readmissao-sus/main/docs/img/dashboard-hospitais.jpg" width="100%" alt="readmissao-sus dashboard: observed/expected readmission ratio per hospital with 95% confidence intervals"/></a>
       <br/>
-      <sub>The dashboard's overview tab: where readmission concentrates, by prior inpatient visits and by discharge destination.</sub>
+      <sub>Observed/expected readmission ratio per hospital, with 95% CI: orange above expected, blue below, grey compatible.</sub>
     </td>
   </tr>
 </table>
@@ -77,10 +78,9 @@
 
 | Project | What it does | Stack | Links |
 | --- | --- | --- | --- |
+| **farmacovigilancia** | Adverse-event signal detection for GLP-1 agonists (semaglutide, tirzepatide and others) in 1.5 million deduplicated FDA FAERS reports: free-text drug names normalized (0.0019% unmapped), PRR, ROR and χ² computed in SQL and checked against SciPy, and a Streamlit dashboard with a forest plot. Recovers known signals such as pancreatitis and GI events. | Python, DuckDB, RapidFuzz, RxNav API, Streamlit, pytest | [repo](https://github.com/P4d1lh4/farmacovigilancia) |
+| **health-project** | First version of the readmission work, on the UCI *Diabetes 130-US hospitals* dataset: model selection with cross-validation grouped by patient, calibrated XGBoost (ROC-AUC 0.68), FastAPI `/predict`, a five-tab Streamlit dashboard and SHAP notebooks. | Python, scikit-learn, XGBoost, SHAP, FastAPI, Streamlit | [repo](https://github.com/P4d1lh4/health-project) |
 | **Nielsen Analytics** | CLI that drives a headless browser through a flow, captures screenshot + accessibility tree + DOM per step, and has a multimodal LLM produce a Nielsen / WCAG 2.1 audit with severity, element selector and suggested fix. | TypeScript, Playwright, Anthropic API, Zod | [repo](https://github.com/P4d1lh4/Nielsen-analytics) |
-| **Portal Professor** | Academic portal for grades and attendance with three roles (admin, coordinator, teacher), Row Level Security on PostgreSQL, audit trail and CI-enforced test coverage. | React, TypeScript, FastAPI, Supabase, Docker, GitHub Actions | [repo](https://github.com/P4d1lh4/Portal-Professor) · [live](https://portalprofessor.vercel.app) |
-| **e-DO AI Engine** | AI service for a digital death-certificate system for SUS: natural-language ICD-11 search, causal-chain validation with clinical rules, Gemini-powered assistant. Part of a public-health initiative with a small team. | Python, FastAPI, RapidFuzz, Gemini API, pytest | private |
-| **Mirai** | Conversational personal shopper: LLM recommendations with real-time price lookup. | Next.js, FastAPI, Groq API, SerpApi, Docker | [repo](https://github.com/P4d1lh4/Mirai-Compra-Inteligente) |
 
 ## 🛠 Stack
 
